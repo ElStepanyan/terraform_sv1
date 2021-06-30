@@ -19,17 +19,17 @@ resource "aws_subnet" "tr_subnet_1" {
   }
 }
 
-#resource "aws_subnet" "tr_subnet_2" {
-#  vpc_id                  = aws_vpc.tr_vpc.id
-#  cidr_block              = "10.1.16.0/20"
-#  availability_zone       = "us-west-2b"
-#
-#  map_public_ip_on_launch = true
-#
-#  tags = {
-#    Name = "tf"
-#  }
-#}
+resource "aws_subnet" "tr_subnet_2" {
+  vpc_id                  = aws_vpc.tr_vpc.id
+  cidr_block              = "10.1.16.0/20"
+  availability_zone       = "us-west-2b"
+
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "tf"
+  }
+}
 
 resource "aws_internet_gateway" "tr_gw" {
   vpc_id = aws_vpc.tr_vpc.id

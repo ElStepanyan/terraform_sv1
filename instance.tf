@@ -127,6 +127,7 @@ resource "aws_instance" "sv_1" {
 
 }
 
+
 output "instance_ip_addr" {
   value = aws_instance.sv_1.public_ip
   description = "The public IP address of the main server instance."
@@ -143,29 +144,29 @@ output "instance_ip_addr" {
 resource "local_file" "application" {
  content = templatefile("application.tmpl",
  {
-     host_ip = aws_instance.sv_1.public_ip
+     host_ip = aws_instance.sv_1.public_ip 
  }
  )
- filename = "application.yml"
+ filename = "/home/elush/terraform_sv1/ansible/src/main/resources/application.yml"
 
 }
 
 
 
-#resource "aws_instance" "wp_2" {
- # ami           = "ami-0ca5c3bd5a268e7db"
- # instance_type = "t2.micro"
- # subnet_id     = aws_subnet.tr_subnet_2.id
- # vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_http.id]
-#  key_name = "tr_key"
-#
-#  credit_specification {
-#    cpu_credits = "unlimited"
- # }
-#
- # tags = {
-  #  Name = "tf"
-  #}
-#}
+resource "aws_instance" "rb_consul" {
+  ami           = "ami-03d5c68bab01f3496"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.tr_subnet_2.id
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_http.id,aws_security_group.allow_rabbit.id]
+  key_name = "tr_key"
+
+credit_specification {
+   cpu_credits = "unlimited"
+  }
+
+  tags = {
+    Name = "tf1"
+  }
+}
 
 
