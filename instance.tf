@@ -98,6 +98,33 @@ resource "aws_security_group" "allow_rabbit" {
   }
 }
 
+resource "aws_security_group" "allow_consul" {
+  name        = "allow_consul"
+  description = "Allow HTTP inbound traffic"
+  vpc_id      = aws_vpc.tr_vpc.id
+
+  ingress {
+    description      = "HTTP from VPC"
+    from_port        = 8300
+    to_port          = 8300
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "tf"
+  }
+}
+
+
+
 
 variable "SSH_KEY" {
   type = string
@@ -156,8 +183,8 @@ resource "local_file" "application" {
 resource "aws_instance" "rb_consul" {
   ami           = "ami-03d5c68bab01f3496"
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.tr_subnet_2.id
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_http.id,aws_security_group.allow_rabbit.id]
+  subnet_id     = aws_subnet.tr_subnet_1.id
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_http.id,aws_security_group.allow_rabbit.id,aws_security_group.allow_consul.id]
   key_name = "tr_key"
 
 credit_specification {
