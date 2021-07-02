@@ -1,8 +1,8 @@
 ---
 # tasks file for rabbitmq
 - name: Transfer the script
-  copy: src= ~/terraform_sv1/ansible/rabbitmq/rabbit.inst dest=/home/ubuntu  mode=0777
-  become: true
+  copy: src=~/terraform_sv1/ansible/rabbit.inst dest=/home/ubuntu  mode=0777
+  # become: true
 
 - name: Execute the script
   command: sh /home/ubuntu/rabbit.inst
