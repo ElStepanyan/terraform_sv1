@@ -1,0 +1,22 @@
+[Unit]
+Description=Consul Service Discovery Agent
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/local/bin/consul agent -server -ui \
+            -advertise=${host_priv_ip} \
+            -bind=${host_priv_ip} \
+            -data-dir=/var/lib/consul \
+            -node=consul-01 \
+            -config-dir=/etc/consul.d
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+TimeoutStopSec=5
+Restart=on-failure
+SyslogIdentifier=consul
+[Install]
+WantedBy=multi-user.target
+

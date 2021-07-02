@@ -4,18 +4,18 @@ resource "aws_security_group" "allow_ssh" {
   vpc_id      = aws_vpc.tr_vpc.id
 
   ingress {
-    description      = "SSH from VPC"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "SSH from VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -29,18 +29,18 @@ resource "aws_security_group" "allow_http" {
   vpc_id      = aws_vpc.tr_vpc.id
 
   ingress {
-    description      = "HTTP from VPC"
-    from_port        = 8082
-    to_port          = 8082
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "HTTP from VPC"
+    from_port   = 8082
+    to_port     = 8082
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -54,18 +54,18 @@ resource "aws_security_group" "allow_mongo" {
   vpc_id      = aws_vpc.tr_vpc.id
 
   ingress {
-    description      = "HTTP from VPC"
-    from_port        = 27017
-    to_port          = 27017
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "HTTP from VPC"
+    from_port   = 27017
+    to_port     = 27017
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -79,18 +79,18 @@ resource "aws_security_group" "allow_rabbit" {
   vpc_id      = aws_vpc.tr_vpc.id
 
   ingress {
-    description      = "HTTP from VPC"
-    from_port        = 5672
-    to_port          = 5672
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "HTTP from VPC"
+    from_port   = 5672
+    to_port     = 5672
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -104,18 +104,18 @@ resource "aws_security_group" "allow_consul" {
   vpc_id      = aws_vpc.tr_vpc.id
 
   ingress {
-    description      = "HTTP from VPC"
-    from_port        = 8300
-    to_port          = 8300
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "HTTP from VPC"
+    from_port   = 8500
+    to_port     = 8500
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
@@ -137,11 +137,11 @@ resource "aws_key_pair" "key" {
 }
 
 resource "aws_instance" "sv_1" {
-  ami           = "ami-03d5c68bab01f3496"
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.tr_subnet_1.id
+  ami                    = "ami-03d5c68bab01f3496"
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.tr_subnet_1.id
   vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_http.id, aws_security_group.allow_rabbit.id, aws_security_group.allow_mongo.id]
-  key_name = "tr_key" 
+  key_name               = "tr_key"
 
   credit_specification {
     cpu_credits = "unlimited"
@@ -156,39 +156,21 @@ resource "aws_instance" "sv_1" {
 
 
 output "instance_ip_addr" {
-  value = aws_instance.sv_1.public_ip
+  value       = aws_instance.sv_1.public_ip
   description = "The public IP address of the main server instance."
 
 }
 
-#resource "null_resource" "export_env" {
-#
-#  provisioner "local-exec" {
-#    command = "export TF_VAR_host_ip=${aws_instance.sv_1.public_ip}"
-#  }
-#}
-
-resource "local_file" "application" {
- content = templatefile("application.tmpl",
- {
-     host_ip = aws_instance.sv_1.public_ip 
- }
- )
- filename = "/home/elush/terraform_sv1/ansible/src/main/resources/application.yml"
-
-}
-
-
 
 resource "aws_instance" "rb_consul" {
-  ami           = "ami-03d5c68bab01f3496"
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.tr_subnet_1.id
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_http.id,aws_security_group.allow_rabbit.id,aws_security_group.allow_consul.id]
-  key_name = "tr_key"
+  ami                    = "ami-03d5c68bab01f3496"
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.tr_subnet_1.id
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_http.id, aws_security_group.allow_rabbit.id, aws_security_group.allow_consul.id]
+  key_name               = "tr_key"
 
-credit_specification {
-   cpu_credits = "unlimited"
+  credit_specification {
+    cpu_credits = "unlimited"
   }
 
   tags = {
@@ -196,4 +178,33 @@ credit_specification {
   }
 }
 
+resource "local_file" "application1" {
+  content = templatefile("application.tmpl",
+    {
+      host_ip = aws_instance.sv_1.public_ip
+      host_ip_1 = aws_instance.rb_consul.public_ip
+    }
+  )
+  filename = "~/terraform_sv1/ansible/src/main/resources/application.yml"
 
+}
+
+resource "local_file" "consl-service" {
+  content = templatefile("consul-service.tmpl",
+    {
+      host_priv_ip = aws_instance.rb_consul.private_ip
+    }
+  )
+  filename = "~/terraform_sv1/ansible/consul/tasks/consul-service"
+
+}
+
+resource "local_file" "consl-config" {
+  content = templatefile("consul-config.tmpl",
+    {
+      host_priv_ip = aws_instance.rb_consul.private_ip
+    }
+  )
+  filename = "~/terraform_sv1/ansible/consul/tasks/consul-config"
+
+}

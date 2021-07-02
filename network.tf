@@ -8,9 +8,9 @@ resource "aws_vpc" "tr_vpc" {
 }
 
 resource "aws_subnet" "tr_subnet_1" {
-  vpc_id                  = aws_vpc.tr_vpc.id
-  cidr_block              = "10.1.0.0/20"
-  availability_zone       = "us-west-2a"
+  vpc_id            = aws_vpc.tr_vpc.id
+  cidr_block        = "10.1.0.0/20"
+  availability_zone = "us-west-2a"
 
   map_public_ip_on_launch = true
 
@@ -20,9 +20,9 @@ resource "aws_subnet" "tr_subnet_1" {
 }
 
 resource "aws_subnet" "tr_subnet_2" {
-  vpc_id                  = aws_vpc.tr_vpc.id
-  cidr_block              = "10.1.16.0/20"
-  availability_zone       = "us-west-2b"
+  vpc_id            = aws_vpc.tr_vpc.id
+  cidr_block        = "10.1.16.0/20"
+  availability_zone = "us-west-2b"
 
   map_public_ip_on_launch = true
 

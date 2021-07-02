@@ -33,16 +33,16 @@ spring:
     - org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
   cloud:
     consul:
-      host: "${host_ip}"
+      host: ${host_ip_1}
       port: 8500
       discovery:
-        hostName: "${host_ip}"
-        instanceId: ${spring.application.name}:${spring.application.instance_id}:${random.value}
-        healthCheckPath: ${management.contextPath}/health
+        hostName: ${host_ip_1}
+        instanceId: $${spring.application.name}:$${spring.application.instance_id}:$${random.value}
+        healthCheckPath: $${management.contextPath}/health
         healthCheckInterval: 15s
-  data.mongodb.uri: 'mongodb://"${host_ip}":27017'
+  data.mongodb.uri: 'mongodb://${host_ip}:27017'
   rabbitmq:
-    host: $${host_ip}
+    host: ${host_ip_1}
     port: 5672
     username: 'rabbituser'
     password: '123456'
