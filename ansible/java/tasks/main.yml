@@ -1,0 +1,50 @@
+---
+# tasks file for java
+- name: 'Update apt repo and cache'
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  become: true
+
+- name: 'Install openjdk-8-jdk'
+  apt: 
+    state: present
+    name: "{{ item }}"
+  loop:
+    - 'openjdk-8-jdk'
+  become: true  
+
+- name: 'Install maven'
+  apt:
+    name: maven
+    state: present
+  become: true
+- name: 'copy sv1 files'
+  copy:
+    src: ~/terraform_sv1/ansible/{{item}}
+    dest: /home/ubuntu    
+  with_items:
+    ['doc','pom.xml','service-one.iml','src']      
+
+- name: 'Running mvn clean'
+  shell: "mvn clean package"
+  become: true
+
+- name: 'Setup sv1 service file'
+  template:
+    src: '../templates/sv1-service'
+    dest: '/etc/systemd/system/sv1.service'
+        # remote_src: yes
+  become: true
+    
+- name: 'sv1 service enabled'
+  ansible.builtin.service:
+    name: sv1.service
+    enabled: yes
+  become: true
+
+- name: 'sv1 service start and daemon-reload'
+  ansible.builtin.service:
+    name: sv1.service
+    state: started
+    daemon_reload: yes
+  become: true
+

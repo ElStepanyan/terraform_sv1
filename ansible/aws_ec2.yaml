@@ -1,0 +1,18 @@
+plugin: aws_ec2
+
+filters:
+  tag:Name:
+    - tf
+  instance-state-name : running
+keyed_groups:
+  - prefix: tf
+    key: tags['tf']
+
+
+    #filters:
+    # tag:Name:
+    # - tf1
+    # instance-state-name : running
+    #keyed_groups:
+    # - prefix: tf1
+    # key: tags['tf1']    

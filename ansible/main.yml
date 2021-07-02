@@ -1,0 +1,10 @@
+- hosts: 'aws_ec2'
+  roles:
+    - role: consul 
+      tags: tf1
+    - role: rabbitmq
+      tags: tf1
+    - role: mongodb
+      tags: tf
+    - role: java
+      tags: tf

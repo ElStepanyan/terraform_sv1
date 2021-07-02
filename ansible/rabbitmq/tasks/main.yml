@@ -1,0 +1,19 @@
+---
+# tasks file for rabbitmq
+- name: Transfer the script
+  copy: src= ~/terraform_sv1/ansible/rabbitmq/rabbit.inst dest=/home/ubuntu  mode=0777
+  become: true
+
+- name: Execute the script
+  command: sh /home/ubuntu/rabbit.inst
+  become: true  
+
+- rabbitmq_user:
+    user: rabbituser
+    password: "your password"
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present  
+  become: true
