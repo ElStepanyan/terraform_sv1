@@ -36,7 +36,7 @@ spring:
       host: ${host_ip_1}
       port: 8500
       discovery:
-        hostName: ${host_ip_1}
+        hostName: ${host_ip}
         instanceId: $${spring.application.name}:$${spring.application.instance_id}:$${random.value}
         healthCheckPath: $${management.contextPath}/health
         healthCheckInterval: 15s

@@ -185,7 +185,7 @@ resource "local_file" "application1" {
       host_ip_1 = aws_instance.rb_consul.public_ip
     }
   )
-  filename = "~/terraform_sv1/ansible/src/main/resources/application.yml"
+  filename = "/home/elush/terraform_sv1/ansible/src/main/resources/application.yml"
 
 }
 
@@ -195,7 +195,7 @@ resource "local_file" "consl-service" {
       host_priv_ip = aws_instance.rb_consul.private_ip
     }
   )
-  filename = "~/terraform_sv1/ansible/consul/tasks/consul-service"
+  filename = "/home/elush/terraform_sv1/ansible/consul/tasks/consul-service"
 
 }
 
@@ -205,6 +205,6 @@ resource "local_file" "consl-config" {
       host_priv_ip = aws_instance.rb_consul.private_ip
     }
   )
-  filename = "~/terraform_sv1/ansible/consul/tasks/consul-config"
+  filename = "/home/elush/terraform_sv1/ansible/consul/tasks/consul-config"
 
 }
