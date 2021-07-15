@@ -19,7 +19,7 @@
   become: true
 - name: 'copy sv1 files'
   copy:
-    src: {{item}}
+    src: ./{{item}}
     dest: /home/ubuntu    
   with_items:
     ['doc','pom.xml','service-one.iml','src']      
