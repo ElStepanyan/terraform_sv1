@@ -7,3 +7,11 @@ provider "aws" {
   skip_region_validation      = true
   skip_credentials_validation = true
 }
+
+terraform {
+  backend "s3" {
+    bucket = "tfstate2222"
+    key = "terraform.tfstate"
+    region = "us-west-2"
+  }
+}
