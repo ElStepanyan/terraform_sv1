@@ -19,7 +19,7 @@
   become: true
 - name: 'copy sv1 files'
   copy:
-    src: ~/terraform_sv1/ansible/{{item}}
+    src: ansible/{{item}}
     dest: /home/ubuntu    
   with_items:
     ['doc','pom.xml','service-one.iml','src']      
