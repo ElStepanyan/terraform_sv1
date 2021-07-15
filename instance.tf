@@ -178,6 +178,13 @@ resource "aws_instance" "rb_consul" {
   }
 }
 
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.rb_consul.id
+  allocation_id =  "eipalloc-02f0749a1ef3ce326"
+}
+
+
+
 resource "local_file" "application1" {
   content = templatefile("application.tmpl",
     {
@@ -185,7 +192,7 @@ resource "local_file" "application1" {
       host_ip_1 = aws_instance.rb_consul.public_ip
     }
   )
-  filename = "/home/elush/terraform_sv1/ansible/src/main/resources/application.yml"
+  filename = "ansible/src/main/resources/application.yml"
 
 }
 
@@ -195,7 +202,7 @@ resource "local_file" "consl-service" {
       host_priv_ip = aws_instance.rb_consul.private_ip
     }
   )
-  filename = "/home/elush/terraform_sv1/ansible/consul/tasks/consul-service"
+  filename = "ansible/consul/tasks/consul-service"
 
 }
 
@@ -205,6 +212,7 @@ resource "local_file" "consl-config" {
       host_priv_ip = aws_instance.rb_consul.private_ip
     }
   )
-  filename = "/home/elush/terraform_sv1/ansible/consul/tasks/consul-config"
+  filename = "ansible/consul/tasks/consul-config"
 
 }
+

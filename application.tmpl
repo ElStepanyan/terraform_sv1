@@ -33,7 +33,7 @@ spring:
     - org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
   cloud:
     consul:
-      host: ${host_ip_1}
+      host: 54.189.182.223
       port: 8500
       discovery:
         hostName: ${host_ip}
@@ -42,10 +42,10 @@ spring:
         healthCheckInterval: 15s
   data.mongodb.uri: 'mongodb://${host_ip}:27017'
   rabbitmq:
-    host: ${host_ip_1}
+    host: 44.194.248.0
     port: 5672
-    username: 'rabbituser'
-    password: '123456'
+    username: 'rabbit'
+    password: 'passw0rd'
     virtualHost: /
 
 # logstash.servers: logstash:5000
